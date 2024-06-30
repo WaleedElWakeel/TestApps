@@ -3,9 +3,9 @@ import logging
 from datetime import datetime
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import os
-from redis import Redis
-redis_client = Redis.from_url(
-    os.environ.get('REDIS_URL'), decode_responses=True)
+# from redis import Redis
+# redis_client = Redis.from_url(
+#     os.environ.get('REDIS_URL'), decode_responses=True)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("FastAPI app")
 
@@ -50,12 +50,12 @@ async def get_env():
     return os.getenv('TEST_ENV')
 
 
-@app.get("/redis", response_model=str, status_code=200)
-async def get_cache():
-    value = redis_client.get('test_key')
-    if not value:
-        print("Not cached")
-        value = 'data'
-        redis_client.set('test_key', value)
+# @app.get("/redis", response_model=str, status_code=200)
+# async def get_cache():
+#     value = redis_client.get('test_key')
+#     if not value:
+#         print("Not cached")
+#         value = 'data'
+#         redis_client.set('test_key', value)
 
-    return value
+#     return value
