@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  node_api:
+    container_name: node_api
+    build:
+      context: ./node
+      dockerfile: ./Dockerfile
+    ports:
+      - 8002:8080
+    depends_on:
+      - test_redis
+    networks:
+      - test_net
+
+  py_api:
+    container_name: py_api
+    build:
+      context: ./python
+      dockerfile: ./Dockerfile
+    volumes:
+      - type: bind
+        source: ./python/app
+        target: /app
+    ports:
+      - 8001:8000
+    env_file:
+      - ./python/.env
+    depends_on:
+      - test_redis
+    networks:
+      - test_net
+
+  test_redis:
+    container_name: test_redis
+    image: redis:6.2-alpine
+    networks:
+      - test_net
+
+volumes:
+  data:
+
+networks:
+  test_net:
+    driver: bridge
